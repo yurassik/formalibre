@@ -13,6 +13,18 @@
     "start": "webpack-dev-server",
     "build": "tsc"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yurassik/formalibre.git"
+  },
+  "keywords": [
+    "form",
+    "forms",
+    "react",
+    "hooks",
+    "react hooks",
+    "validation"
+  ],
   "dependencies": {
     "react": "^17.0.1"
   },

@@ -4,10 +4,10 @@ import { createForm } from './createForm';
 import { createWithForm } from './createWithForm';
 import { createArrayField } from './array/createArrayField';
 import { createFieldGroup } from './group/createFieldGroup';
-export var make = function (config, FormComponent) {
+export var make = function (config) {
     return {
         withForm: createWithForm(config),
-        Form: createForm(config)(FormComponent),
+        Form: createForm(config),
         useForm: createUseForm(),
         useField: createUseField(),
         ArrayField: createArrayField(),

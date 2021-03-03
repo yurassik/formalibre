@@ -91,23 +91,23 @@ export var useFormEngine = function (config, props) {
         setFormData({});
     };
     var isRequiredFieldEmpty = Object.values(formState).some(function (field) { var _a; return ((_a = field === null || field === void 0 ? void 0 : field.constraints) === null || _a === void 0 ? void 0 : _a.required) && !field.value; });
+    var _m = config.initialize, initialize = _m === void 0 ? function () { } : _m, _o = config.handleError, handleError = _o === void 0 ? function () { } : _o;
     var onMount = function () { return __awaiter(void 0, void 0, void 0, function () {
-        var _a, initialize, error_1;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        var error_1;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    _a = config.initialize, initialize = _a === void 0 ? function () { } : _a;
                     if (!initializing) return [3, 5];
-                    _b.label = 1;
+                    _a.label = 1;
                 case 1:
-                    _b.trys.push([1, 3, 4, 5]);
+                    _a.trys.push([1, 3, 4, 5]);
                     return [4, initialize({ setFormData: setFormData, setPayload: setPayload, disableForm: disableForm, clear: clear, connectedData: connectedData, payload: payload, formData: formData })];
                 case 2:
-                    _b.sent();
+                    _a.sent();
                     return [3, 5];
                 case 3:
-                    error_1 = _b.sent();
-                    config.handleError(error_1, { setErrors: setErrors, setFormError: setFormError, resetErrors: resetErrors });
+                    error_1 = _a.sent();
+                    handleError(error_1, { setErrors: setErrors, setFormError: setFormError, resetErrors: resetErrors });
                     if (process.env.NODE_ENV === 'development') {
                         console.error(error_1);
                     }
@@ -356,7 +356,7 @@ export var useFormEngine = function (config, props) {
                     if (process.env.NODE_ENV === 'development') {
                         console.error(error_2);
                     }
-                    config.handleError(error_2, { setErrors: setErrors, setFormError: setFormError, resetErrors: resetErrors });
+                    handleError(error_2, { setErrors: setErrors, setFormError: setFormError, resetErrors: resetErrors });
                     throw error_2;
                 case 6:
                     setProgress(false);

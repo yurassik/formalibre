@@ -13,7 +13,7 @@ import * as React from 'react';
 import { FormContext } from './FormContext';
 import { ArrayFieldContext } from './array/ArrayFieldContext';
 import { ArrayItemContext } from './array/ArrayItemContext';
-import { FieldGroupContext } from './group/createFieldGroup';
+import { FieldGroupContext } from './group/FieldGroupContext';
 export var useFieldEngine = function (path) {
     var _a;
     var form = React.useContext(FormContext);

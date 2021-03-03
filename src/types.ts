@@ -28,16 +28,18 @@ export interface RegisterFieldInitData<E> {
 }
 
 export interface FormMakeConfig<E> {
-  handleError: HandleErrorFn<E>;
+  handleError?: HandleErrorFn<E>;
+  formComponent: React.ComponentType<FormComponentProps>;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export interface FormEngineConfig<FD, PLD, CD, PRPS> {
+export interface FormEngineConfig<FD, PLD, CD, PRPS, ERR> {
   initialize?: InitializeFormFn<Partial<FD>, PLD, CD>;
   formValidate?: FormValidateFn<Partial<FD>, PLD>;
   useConnect?: (props: PRPS) => CD;
   onSubmit: OnSubmitFn<Partial<FD>, PLD, CD>;
   dependencies?: (connectedData: CD) => any[];
+  handleError?: HandleErrorFn<ERR>;
 }
 
 type ErrorHandlerEffects<E> = { setFormError: SetFormErrorFn<E>; setErrors: SetErrorsFn<E>; resetErrors: ResetErrorsFn };
@@ -75,7 +77,7 @@ export type DataStructure<T> = { [key: string]: DataStructure<T> | DataStructure
 
 export type FlatStructure<T> = { [key: string]: T };
 
-export type FormState<E = string> = FlatStructure<FieldData<E>>;
+export type FormState<E> = FlatStructure<FieldData<E>>;
 
 export type FormFinalData = DataStructure<FinalValue>;
 
@@ -103,25 +105,25 @@ type SetFormDataFn<F> = React.Dispatch<React.SetStateAction<F>>;
 
 export type Errors<E> = { [path: string]: E };
 
-export type FormProps<FD, PLD> = {
+export type FormProps<FD, PLD, ERR> = {
   onSubmit: OnSubmitFn<FD, PLD>;
-} & Pick<FormEngineConfig<FD, PLD, any, {}>, 'formValidate' | 'initialize'>;
+} & Pick<FormEngineConfig<FD, PLD, any, {}, ERR>, 'formValidate' | 'initialize'>;
 
 export type FormComponentProps = { onSubmit?: HandleSubmitFn };
 
-export interface FormContextValue<F, E, P = {}, C = {}> {
+export interface FormContextValue<FD, E, PLD = {}, CD = {}> {
   formId: string;
   formState: FormState<E>;
-  formData: Partial<F>;
+  formData: Partial<FD>;
   formError?: E;
-  payload: P;
-  connectedData: C;
+  payload: PLD;
+  connectedData: CD;
 
-  setValue: (path: keyof F | string, value: any) => void;
+  setValue: (path: keyof FD | string, value: any) => void;
   setConstraints: (path: string, constraints: Constraints) => void;
   setError: (path: string, error: E) => void;
   setFormError?: React.Dispatch<React.SetStateAction<E>>;
-  setPayload: SetPayloadFn<P>;
+  setPayload: SetPayloadFn<PLD>;
   setMountedFields: React.Dispatch<React.SetStateAction<number>>;
 
   registerField: RegisterFieldFn<E>;
@@ -160,3 +162,8 @@ export interface ArrayFieldContextValue {
 export interface ArrayItemContextValue {
   index?: number;
 }
+
+export interface FieldGroupContextValue {
+  registerInGroup?: (path: string) => void;
+  unregisterInGroup?: (path: string) => void;
+};

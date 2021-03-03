@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { FormMakeConfig, FormComponentProps } from './types';
-export declare const make: <E>(config: FormMakeConfig<E>, FormComponent: React.ComponentType<FormComponentProps>) => {
-    withForm: <FD, PLD = {}, CD = {}, PRPS = {}>(config: import("./types").FormEngineConfig<FD, PLD, CD, PRPS>) => (Component: React.ComponentType<PRPS>) => React.FC<PRPS> & {
+/// <reference types="react" />
+import { FormMakeConfig } from './types';
+export declare const make: <E>(config: FormMakeConfig<E>) => {
+    withForm: <FD, PLD = {}, CD = {}, PRPS = {}>(config: import("./types").FormEngineConfig<FD, PLD, CD, PRPS, E>) => (Component: import("react").ComponentType<PRPS>) => import("react").FC<PRPS> & {
         [key: string]: any;
     };
-    Form: <FD_1, PLD_1 = any, CD_1 = any>(props: React.PropsWithChildren<import("./types").FormProps<Partial<FD_1>, PLD_1>>) => JSX.Element;
+    Form: <FD_1, PLD_1 = any, CD_1 = any>(props: import("react").PropsWithChildren<import("./types").FormProps<Partial<FD_1>, PLD_1, E>>) => JSX.Element;
     useForm: <F, P = {}, C = {}>() => import("./types").FormContextValue<F, E, P, C>;
     useField: (path: string, initData: import("./types").RegisterFieldInitData<E>) => {
         field: {
@@ -13,7 +13,7 @@ export declare const make: <E>(config: FormMakeConfig<E>, FormComponent: React.C
             value: any;
             defaultValue: any;
             error: E;
-            ref: React.RefObject<Partial<HTMLElement> & {
+            ref: import("react").RefObject<Partial<HTMLElement> & {
                 [key: string]: any;
             }>;
             validate: import("./types").Validate<E>;
@@ -27,6 +27,6 @@ export declare const make: <E>(config: FormMakeConfig<E>, FormComponent: React.C
             initializing: boolean;
         };
     };
-    ArrayField: React.FC<import("./array/createArrayField").Props>;
-    FieldGroup: React.FC<import("./group/createFieldGroup").Props>;
+    ArrayField: import("react").FC<import("./array/createArrayField").Props>;
+    FieldGroup: import("react").FC<import("./group/createFieldGroup").Props>;
 };

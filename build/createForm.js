@@ -20,10 +20,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-import * as React from 'react';
-import { FormContext } from './FormContext';
-import { useFormEngine } from './useFormEngine';
-export var createForm = function (params) { return function (FormComponent) {
+import * as React from "react";
+import { FormContext } from "./FormContext";
+import { useFormEngine } from "./useFormEngine";
+export var createForm = function (_a) {
+    var FormComponent = _a.formComponent, params = __rest(_a, ["formComponent"]);
     var Form = function (props) {
         var children = props.children, onSubmit = props.onSubmit, initialize = props.initialize, formValidate = props.formValidate, rest = __rest(props, ["children", "onSubmit", "initialize", "formValidate"]);
         var form = useFormEngine(__assign(__assign({}, params), { initialize: initialize, formValidate: formValidate, onSubmit: onSubmit }), rest);
@@ -31,4 +32,4 @@ export var createForm = function (params) { return function (FormComponent) {
             React.createElement(FormComponent, __assign({ onSubmit: form.handleSubmit }, rest), children)));
     };
     return Form;
-}; };
+};

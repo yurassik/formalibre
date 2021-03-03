@@ -15,20 +15,19 @@ import {
   Constraints,
   SubmitHandlerFn,
   RegisterFieldInitData,
-  FormMakeConfig,
 } from './types';
 import { makeId, setByPath, getByPath, removeByPath, normalizeStringValue } from './utils';
 
 export const useFormEngine = <
   FD extends FormFinalData,
   PLD extends FormPayload,
-  ERR,
   PRPS,
-  CD
+  CD,
+  ERR,
 >(
-  config: FormEngineConfig<FD, PLD, CD, PRPS> & FormMakeConfig<ERR>,
+  config: FormEngineConfig<FD, PLD, CD, PRPS, ERR>,
   props: PRPS,
-): FormContextValue<FD, ERR, PLD> => {
+): FormContextValue<FD, ERR, PLD, CD> => {
   const formId = useMemo(() => makeId(), []);
   const [isFirstInit, setIsFirstInit] = useState(true);
   const [disabled, setDisabled] = useState(false);
@@ -58,14 +57,14 @@ export const useFormEngine = <
   };
 
   const isRequiredFieldEmpty = Object.values(formState).some((field) => field?.constraints?.required && !field.value);
+  const { initialize = () => {}, handleError = () => {} } = config;
 
   const onMount = async () => {
-    const { initialize = () => {} } = config;
     if (initializing) {
       try {
         await initialize({ setFormData, setPayload, disableForm, clear, connectedData, payload, formData });
       } catch (error) {
-        config.handleError(error, { setErrors, setFormError, resetErrors });
+        handleError(error, { setErrors, setFormError, resetErrors });
         if (process.env.NODE_ENV === 'development') {
           // eslint-disable-next-line no-console
           console.error(error);
@@ -310,7 +309,7 @@ export const useFormEngine = <
         // eslint-disable-next-line no-console
         console.error(error);
       }
-      config.handleError(error, { setErrors, setFormError, resetErrors });
+      handleError(error, { setErrors, setFormError, resetErrors });
       throw error;
     } finally {
       setProgress(false);

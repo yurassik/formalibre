@@ -1,15 +1,15 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { FormMakeConfig, FormProps, FormComponentProps } from './types';
-import { FormContext } from './FormContext';
-import { useFormEngine } from './useFormEngine';
+import { FormMakeConfig, FormProps } from "./types";
+import { FormContext } from "./FormContext";
+import { useFormEngine } from "./useFormEngine";
 
-export const createForm = <E, >(params: FormMakeConfig<E>) => (
-  FormComponent: React.ComponentType<FormComponentProps>,
-) => {
-  const Form = <FD, PLD = any, CD = any>(props: React.PropsWithChildren<FormProps<Partial<FD>, PLD>>) => {
+export const createForm = <E,>({ formComponent: FormComponent, ...params }: FormMakeConfig<E>) => {
+  const Form = <FD, PLD = any, CD = any>(
+    props: React.PropsWithChildren<FormProps<Partial<FD>, PLD, E>>
+  ) => {
     const { children, onSubmit, initialize, formValidate, ...rest } = props;
-    const form = useFormEngine<FD, PLD, E, any, CD>({ ...params, initialize, formValidate, onSubmit }, rest);
+    const form = useFormEngine<FD, PLD, any, CD, E>({ ...params, initialize, formValidate, onSubmit }, rest);
 
     return (
       <FormContext.Provider value={form}>

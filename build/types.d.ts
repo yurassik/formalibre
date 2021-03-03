@@ -27,14 +27,16 @@ export interface RegisterFieldInitData<E> {
     autoFocus?: boolean;
 }
 export interface FormMakeConfig<E> {
-    handleError: HandleErrorFn<E>;
+    handleError?: HandleErrorFn<E>;
+    formComponent: React.ComponentType<FormComponentProps>;
 }
-export interface FormEngineConfig<FD, PLD, CD, PRPS> {
+export interface FormEngineConfig<FD, PLD, CD, PRPS, ERR> {
     initialize?: InitializeFormFn<Partial<FD>, PLD, CD>;
     formValidate?: FormValidateFn<Partial<FD>, PLD>;
     useConnect?: (props: PRPS) => CD;
     onSubmit: OnSubmitFn<Partial<FD>, PLD, CD>;
     dependencies?: (connectedData: CD) => any[];
+    handleError?: HandleErrorFn<ERR>;
 }
 declare type ErrorHandlerEffects<E> = {
     setFormError: SetFormErrorFn<E>;
@@ -65,7 +67,7 @@ export declare type DataStructure<T> = {
 export declare type FlatStructure<T> = {
     [key: string]: T;
 };
-export declare type FormState<E = string> = FlatStructure<FieldData<E>>;
+export declare type FormState<E> = FlatStructure<FieldData<E>>;
 export declare type FormFinalData = DataStructure<FinalValue>;
 export declare type FormPayload = {
     [key: string]: any;
@@ -85,24 +87,24 @@ declare type SetFormDataFn<F> = React.Dispatch<React.SetStateAction<F>>;
 export declare type Errors<E> = {
     [path: string]: E;
 };
-export declare type FormProps<FD, PLD> = {
+export declare type FormProps<FD, PLD, ERR> = {
     onSubmit: OnSubmitFn<FD, PLD>;
-} & Pick<FormEngineConfig<FD, PLD, any, {}>, 'formValidate' | 'initialize'>;
+} & Pick<FormEngineConfig<FD, PLD, any, {}, ERR>, 'formValidate' | 'initialize'>;
 export declare type FormComponentProps = {
     onSubmit?: HandleSubmitFn;
 };
-export interface FormContextValue<F, E, P = {}, C = {}> {
+export interface FormContextValue<FD, E, PLD = {}, CD = {}> {
     formId: string;
     formState: FormState<E>;
-    formData: Partial<F>;
+    formData: Partial<FD>;
     formError?: E;
-    payload: P;
-    connectedData: C;
-    setValue: (path: keyof F | string, value: any) => void;
+    payload: PLD;
+    connectedData: CD;
+    setValue: (path: keyof FD | string, value: any) => void;
     setConstraints: (path: string, constraints: Constraints) => void;
     setError: (path: string, error: E) => void;
     setFormError?: React.Dispatch<React.SetStateAction<E>>;
-    setPayload: SetPayloadFn<P>;
+    setPayload: SetPayloadFn<PLD>;
     setMountedFields: React.Dispatch<React.SetStateAction<number>>;
     registerField: RegisterFieldFn<E>;
     updateField: (path: string, config: Pick<RegisterFieldInitData<E>, 'constraints'>) => void;
@@ -140,5 +142,9 @@ export interface ArrayFieldContextValue {
 }
 export interface ArrayItemContextValue {
     index?: number;
+}
+export interface FieldGroupContextValue {
+    registerInGroup?: (path: string) => void;
+    unregisterInGroup?: (path: string) => void;
 }
 export {};

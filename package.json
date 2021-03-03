@@ -8,7 +8,7 @@
   ],
   "license": "MIT",
   "main": "build/index.js",
-  "types": "lib/index.d.ts",
+  "types": "build/index.d.ts",
   "scripts": {
     "start": "webpack-dev-server",
     "build": "tsc"

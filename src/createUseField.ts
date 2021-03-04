@@ -4,7 +4,10 @@ import { FinalValue, FieldData, RegisterFieldInitData } from './types';
 import { useFieldEngine } from './useFieldEngine';
 import { normalizeStringValue, useFirstRender } from './utils';
 
-export type UseField<E> = ReturnType<typeof createUseField>;
+export type UseField<E> = (path: string, initData: RegisterFieldInitData<E>) => {
+  field: FieldData<E> & { onChange: (value: FinalValue) => void, onBlur: VoidFunction };
+  form: { disabled: boolean, progress: boolean, initializing: boolean }; 
+}
 
 export const createUseField = <E>() => (path: string, initData: RegisterFieldInitData<E>) => {
   const firstRender = useFirstRender();

@@ -1,8 +1,8 @@
 import React from 'react';
-export interface Props {
+export interface FieldGroupProps {
     children: (props: {
         isValid: boolean;
         isFilled: boolean;
     }) => React.ReactNode;
 }
-export declare const FieldGroup: React.FC<Props>;
+export declare const FieldGroup: React.FC<FieldGroupProps>;

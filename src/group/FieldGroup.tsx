@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { FormContext } from '../FormContext';
 import { FieldGroupContext } from './FieldGroupContext';
 
-export interface Props {
+export interface FieldGroupProps {
   children: (props: { isValid: boolean; isFilled: boolean }) => React.ReactNode;
 }
 
-export const FieldGroup: React.FC<Props> = ({ children }) => {
+export const FieldGroup: React.FC<FieldGroupProps> = ({ children }) => {
   const [fields, setFields] = React.useState<string[]>();
   const [isValid, setIsValid] = React.useState<boolean>(true);
   const [isFilled, setIsFilled] = React.useState<boolean>(false);

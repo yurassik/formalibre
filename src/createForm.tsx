@@ -4,6 +4,8 @@ import { FormMakeConfig, FormProps } from "./types";
 import { FormContext } from "./FormContext";
 import { useFormEngine } from "./useFormEngine";
 
+export type TForm<E> = <FD, PLD = any, CD = any>(props: React.PropsWithChildren<FormProps<Partial<FD>, PLD, E>>) => JSX.Element;
+
 export const createForm = <E,>({ formComponent: FormComponent, ...params }: FormMakeConfig<E>) => {
   const Form = <FD, PLD = any, CD = any>(
     props: React.PropsWithChildren<FormProps<Partial<FD>, PLD, E>>

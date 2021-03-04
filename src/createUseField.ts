@@ -4,6 +4,8 @@ import { FinalValue, FieldData, RegisterFieldInitData } from './types';
 import { useFieldEngine } from './useFieldEngine';
 import { normalizeStringValue, useFirstRender } from './utils';
 
+export type UseField<E> = ReturnType<typeof createUseField>;
+
 export const createUseField = <E>() => (path: string, initData: RegisterFieldInitData<E>) => {
   const firstRender = useFirstRender();
   const {

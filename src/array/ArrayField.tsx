@@ -7,14 +7,14 @@ import { FormContext } from '../FormContext';
 import { ArrayFieldRenderItemFn, ArrayFieldRenderContainerFn } from '../types';
 import { makeId, getByPath } from '../utils';
 
-export interface Props {
+export interface ArrayFieldProps {
   name: string;
   renderItem: ArrayFieldRenderItemFn;
   renderContainer: ArrayFieldRenderContainerFn;
   pushItems?: number;
 }
 
-export const ArrayField: React.FC<Props> = (props) => {
+export const ArrayField: React.FC<ArrayFieldProps> = (props) => {
   const { name: relativePath, renderItem, renderContainer, pushItems } = props;
   const [entries, setEntries] = React.useState<string[]>([]);
 

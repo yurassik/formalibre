@@ -1,6 +1,16 @@
 import * as React from 'react';
-import { FinalValue, RegisterFieldInitData } from './types';
-export declare type UseField<E> = ReturnType<typeof createUseField>;
+import { FinalValue, FieldData, RegisterFieldInitData } from './types';
+export declare type UseField<E> = (path: string, initData: RegisterFieldInitData<E>) => {
+    field: FieldData<E> & {
+        onChange: (value: FinalValue) => void;
+        onBlur: VoidFunction;
+    };
+    form: {
+        disabled: boolean;
+        progress: boolean;
+        initializing: boolean;
+    };
+};
 export declare const createUseField: <E>() => (path: string, initData: RegisterFieldInitData<E>) => {
     field: {
         onChange: (value: FinalValue) => void;

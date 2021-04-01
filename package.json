@@ -1,6 +1,6 @@
 {
   "name": "formalibre",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "A simple instrument to build form your dream with react",
   "author": "Yurii Pavlenko <yurokman@gmail.com>",
   "contributors": [
@@ -26,13 +26,11 @@
     "react hooks",
     "validation"
   ],
-  "dependencies": {
-    "react": "^17.0.1"
-  },
   "devDependencies": {
     "@types/react": "^17.0.2",
     "typescript": "^4.2.2",
     "webpack": "^5.24.2",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "react": "^17.0.1"
   }
 }

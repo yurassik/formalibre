@@ -34,7 +34,7 @@ export interface FormMakeConfig<E> {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface FormEngineConfig<FD, PLD, CD, PRPS, ERR> {
-  initialize?: InitializeFormFn<Partial<FD>, PLD, CD>;
+  initialize?: InitializeFormFn<Partial<FD>, PLD, CD, ERR>;
   formValidate?: FormValidateFn<Partial<FD>, PLD>;
   useConnect?: (props: PRPS) => CD;
   onSubmit: OnSubmitFn<Partial<FD>, PLD, CD>;
@@ -46,9 +46,10 @@ type ErrorHandlerEffects<E> = { setFormError: SetFormErrorFn<E>; setErrors: SetE
 
 type FormThings<F, P, C> = {
   formData: F;
-  payload: P,
-  connectedData: C,
-}
+  payload: P;
+  connectedData: C;
+
+};
 type FormEffects<F, P> = {
   setPayload: SetPayloadFn<P>;
   setFormData: SetFormDataFn<F>;
@@ -65,8 +66,8 @@ export type OnSubmitFn<F, P = any, C = any> = (
 
 export type FormValidateFn<FD, PLD> = (formData: FD, payload: PLD) => Promise<Error>;
 
-export type InitializeFormFn<F, P = any, C = any> = (
-  essentials: FormEffects<F, P> & FormThings<F, P, C>
+export type InitializeFormFn<F, P = any, C = any, E = string> = (
+  essentials: FormEffects<F, P> & FormThings<F, P, C> & ErrorHandlerEffects<E>
 ) => void | Promise<void>;
 
 export type Validate<E> = (value: FinalValue, constraints: Constraints) => E | null;

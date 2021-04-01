@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from "react";
 
 import {
   FormState,
@@ -15,18 +15,24 @@ import {
   Constraints,
   SubmitHandlerFn,
   RegisterFieldInitData,
-} from './types';
-import { makeId, setByPath, getByPath, removeByPath, normalizeStringValue } from './utils';
+} from "./types";
+import {
+  makeId,
+  setByPath,
+  getByPath,
+  removeByPath,
+  normalizeStringValue,
+} from "./utils";
 
 export const useFormEngine = <
   FD extends FormFinalData,
   PLD extends FormPayload,
   PRPS,
   CD,
-  ERR,
+  ERR
 >(
   config: FormEngineConfig<FD, PLD, CD, PRPS, ERR>,
-  props: PRPS,
+  props: PRPS
 ): FormContextValue<FD, ERR, PLD, CD> => {
   const formId = useMemo(() => makeId(), []);
   const [isFirstInit, setIsFirstInit] = useState(true);
@@ -56,16 +62,29 @@ export const useFormEngine = <
     setFormData({});
   };
 
-  const isRequiredFieldEmpty = Object.values(formState).some((field) => field?.constraints?.required && !field.value);
+  const isRequiredFieldEmpty = Object.values(formState).some(
+    (field) => field?.constraints?.required && !field.value
+  );
   const { initialize = () => {}, handleError = () => {} } = config;
 
   const onMount = async () => {
     if (initializing) {
       try {
-        await initialize({ setFormData, setPayload, disableForm, clear, connectedData, payload, formData });
+        await initialize({
+          setFormData,
+          setPayload,
+          disableForm,
+          clear,
+          connectedData,
+          payload,
+          formData,
+          setErrors,
+          setFormError,
+          resetErrors,
+        });
       } catch (error) {
         handleError(error, { setErrors, setFormError, resetErrors });
-        if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === "development") {
           // eslint-disable-next-line no-console
           console.error(error);
         }
@@ -96,7 +115,7 @@ export const useFormEngine = <
       }
       reinit();
     },
-    config.dependencies ? config.dependencies(connectedData) : [],
+    config.dependencies ? config.dependencies(connectedData) : []
   );
 
   const reinit = () => {
@@ -140,7 +159,14 @@ export const useFormEngine = <
   };
 
   const registerField: RegisterFieldFn<ERR> = (path, field) => {
-    const { defaultValue, constraints, validate, customValidate, ref, autoFocus } = field;
+    const {
+      defaultValue,
+      constraints,
+      validate,
+      customValidate,
+      ref,
+      autoFocus,
+    } = field;
     if (autoFocus) {
       ref.current.focus();
     }
@@ -167,7 +193,10 @@ export const useFormEngine = <
     setRegisteredFields((prevValue = 0) => prevValue + 1);
   };
 
-  const updateField = (path: string, { constraints }: Pick<RegisterFieldInitData<ERR>, 'constraints'>) => {
+  const updateField = (
+    path: string,
+    { constraints }: Pick<RegisterFieldInitData<ERR>, "constraints">
+  ) => {
     setFormState((prevState) => {
       const nextState = { ...prevState };
       nextState[path] = { ...nextState[path], constraints };
@@ -200,12 +229,16 @@ export const useFormEngine = <
     const newFormData = { ...formData };
     const array = getByPath(arrayPath, newFormData);
     const isLast = array.length - 1 === index;
-    setByPath(arrayPath, [...array.slice(0, index), ...array.slice(index + 1)], newFormData);
+    setByPath(
+      arrayPath,
+      [...array.slice(0, index), ...array.slice(index + 1)],
+      newFormData
+    );
     setFormData(newFormData);
     setFormState((state) => {
       return Object.entries(state).reduce((acc, [path, value]) => {
         if (path.startsWith(arrayPath)) {
-          const escapedArrayPath = arrayPath.replace(/\[|\]/g, '\\$&');
+          const escapedArrayPath = arrayPath.replace(/\[|\]/g, "\\$&");
           const reg = new RegExp(`^(${escapedArrayPath})\\[(.+)\\](\\..*)`);
           const [, , currentIndex] = reg.exec(path);
           if (isLast && Number(currentIndex) === index) {
@@ -235,10 +268,13 @@ export const useFormEngine = <
 
   const resetErrors: ResetErrorsFn = () => {
     setFormState((prevState) => {
-      const nextState = Object.entries(prevState).reduce((acc, [path, fieldData]) => {
-        acc[path] = { ...fieldData, error: null };
-        return acc;
-      }, {} as FormState<ERR>);
+      const nextState = Object.entries(prevState).reduce(
+        (acc, [path, fieldData]) => {
+          acc[path] = { ...fieldData, error: null };
+          return acc;
+        },
+        {} as FormState<ERR>
+      );
 
       return nextState;
     });
@@ -255,7 +291,12 @@ export const useFormEngine = <
   }
 
   function validateField(path: string, customValue?: any): ERR | null {
-    const { value: fieldValue, validate = null, customValidate = null, constraints } = formState[path];
+    const {
+      value: fieldValue,
+      validate = null,
+      customValidate = null,
+      constraints,
+    } = formState[path];
     const value = customValue || fieldValue;
     let error = validate && validate(value, constraints);
     if (!error) {
@@ -278,12 +319,15 @@ export const useFormEngine = <
         return;
       }
       // TODO: add normalizer to config
-      const normalizedFormData = Object.entries(formData).reduce((acc, [key, value]) => {
-        if (typeof value === 'string') {
-          return { ...acc, [key]: normalizeStringValue(value) };
-        }
-        return { ...acc, [key]: value };
-      }, {} as Partial<FD>);
+      const normalizedFormData = Object.entries(formData).reduce(
+        (acc, [key, value]) => {
+          if (typeof value === "string") {
+            return { ...acc, [key]: normalizeStringValue(value) };
+          }
+          return { ...acc, [key]: value };
+        },
+        {} as Partial<FD>
+      );
 
       if (config.formValidate) {
         const rawError = await config.formValidate(normalizedFormData, payload);
@@ -301,11 +345,11 @@ export const useFormEngine = <
           clear,
           disableForm,
           setFormData,
-          setPayload
+          setPayload,
         });
       await middleware(submit);
     } catch (error) {
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === "development") {
         // eslint-disable-next-line no-console
         console.error(error);
       }
